@@ -49,7 +49,7 @@ const AnswerReplyCard = (props) => {
                     <AntDesign style={styles.answerCardProfilePicture} name="user" />
                 </View>
                 <View style={styles.answerCardUsernameView}>
-                    <Text style={styles.answerCardUsernameText}>Username</Text>
+                    <Text style={styles.answerCardUsernameText}>{props.reply.user.userName}</Text>
                 </View>
                 <View style={styles.answerCardDateView}>
                     <Entypo style={{color: '#808080'}} name="dot-single" />
@@ -72,10 +72,10 @@ const AnswerReplyCard = (props) => {
                     <Text style={styles.reactionText}>{props.reply.votes}</Text>
                 </TouchableOpacity>
 
-                <View style={styles.reactionButton}>
-                    <FontAwesome style={styles.reactionIcon} name="commenting-o" />
-                    <Text style={styles.reactionText}>{props.reply.votes}</Text>
-                </View>
+                <TouchableOpacity style={styles.reactionButton}>
+                    <AntDesign style={styles.reactionIcon} name="back" />
+                    <Text style={styles.reactionText}>reply</Text>
+                </TouchableOpacity>
 
                 <TouchableOpacity style={styles.editButton}>
                     <Entypo style={styles.reactionIcon} name="dots-three-horizontal" />

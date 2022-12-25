@@ -17,8 +17,6 @@ const AnswerCard = (props) => {
     useEffect(() => {
         GetAnswer()
         GetReplies()
-        const answer = props.answer
-        console.log({answer})
     }, [])
 
     const GetAnswer = () =>{
@@ -106,12 +104,21 @@ const AnswerCard = (props) => {
                         <AntDesign style={styles.answerCardProfilePicture} name="user" />
                     </View>
                     <View style={styles.answerCardUsernameView}>
-                        <Text style={styles.answerCardUsernameText}>Username</Text>
+                        <Text style={styles.answerCardUsernameText}>{props.answer.user.userName}</Text>
                     </View>
                     <View style={styles.answerCardDateView}>
                         <Entypo style={{color: '#808080'}} name="dot-single" />
                         <Text style={styles.answerCardDateText}>{Answered()}</Text>
                     </View>
+                    {
+                        props.answer.solution ? 
+                        (
+                            <View style={{flex: 1, alignItems: 'flex-end'}}>
+                                <AntDesign style={{color: '#33CC33', fontSize: 24}} name="checkcircle" />
+                            </View>
+                        ) :
+                        null
+                    }
                 </View>
 
                 <View style={styles.answerCardContent}>
@@ -129,35 +136,43 @@ const AnswerCard = (props) => {
                         <Text style={styles.reactionText}>{props.answer.votes}</Text>
                     </TouchableOpacity>
 
-                    <View style={styles.reactionButton}>
-                        <FontAwesome style={styles.reactionIcon} name="commenting-o" />
-                        <Text style={styles.reactionText}>{props.answer.votes}</Text>
-                    </View>
+                    <TouchableOpacity style={styles.reactionButton}>
+                        <AntDesign style={styles.reactionIcon} name="back" />
+                        <Text style={styles.reactionText}>reply</Text>
+                    </TouchableOpacity>
 
                     <TouchableOpacity style={styles.editButton}>
                         <Entypo style={styles.reactionIcon} name="dots-three-horizontal" />
                     </TouchableOpacity>
                 </View>
 
-                <View style={styles.answerReplysView}>
-                    {
-                        replies.map((reply, index) => {
-                            if(index != replies.length-1){
-                                return(
-                                    <View style={{marginBottom: 42}}>
-                                        <AnswerReplyCard reply={reply} />
-                                    </View>
-                                )
-                            }else{
-                                return(
-                                    <View style={{marginBottom: 8}}>
-                                        <AnswerReplyCard reply={reply} />
-                                    </View>
-                                )
+                {
+                    replies.length > 0 ? 
+                    (
+                        <View style={styles.answerReplysView}>
+                            {
+                                replies.map((reply, index) => {
+                                    if(index != replies.length-1){
+                                        return(
+                                            <View style={{marginBottom: 42}}>
+                                                <AnswerReplyCard reply={reply} />
+                                            </View>
+                                        )
+                                    }else{
+                                        return(
+                                            <View style={{marginBottom: 8}}>
+                                                <AnswerReplyCard reply={reply} />
+                                            </View>
+                                        )
+                                    }
+                                })
                             }
-                        })
-                    }
-                </View>
+                        </View>
+                    ) :
+                    (
+                        <View style={{marginTop: 8}}></View>
+                    )
+                }
             </View>
         </View>
     )

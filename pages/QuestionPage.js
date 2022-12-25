@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity, ScrollView, Image, TextInput, Modal, Pressable, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, Button, TouchableOpacity, ScrollView, Image, TextInput, Modal, Pressable, Keyboard, KeyboardAvoidingView } from 'react-native';
 import AnswerCard from '../components/AnswerCard.js';
 
 import AppBar from '../components/AppBar.js';
@@ -19,13 +19,11 @@ const QuestionPage = ({route, navigation}) => {
 
     const [question, setQuestion] = useState([])
     const [answers, setAnswers] = useState([])
-    const [error, setError] = useState()
     const [myAnswer, setMyAsnwer] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
     const {id} = route.params
 
     useEffect(() => {
-        console.log("Hello")
         fetchQuestion()
         fetchAnswer()
     }, [])
@@ -62,8 +60,9 @@ const QuestionPage = ({route, navigation}) => {
     }
 
     const replyAnswer = () => {
+        console.log('Answer: ' + myAnswer)
         if(FilandaSignin.currentUser){
-            if(myAnswer != '' || myAnswer != undefined || myAnswer != null){
+            if(myAnswer != '' && myAnswer != undefined && myAnswer != null){
                 aManager.CreateAnswer(new Answer(0, FilandaSignin.currentUser, question.id, myAnswer, 0, false, null))
                 console.log("Reply")
             }else{
@@ -101,31 +100,29 @@ const QuestionPage = ({route, navigation}) => {
                 </Modal>
                 </View>
             <View style={styles.container}>
-                <ScrollView style={{margin: 0, padding: 0}}>
+                <ScrollView style={{margin: 0, padding: 0, marginBottom: 50,}} contentProps={{keyboardDismissMode: 'interactive', keyboardShouldPersistTaps: 'handled'}}>
                     <View style={styles.questionContainer}>
                         <QuestionPageCard question={question}/>
                     </View>
                     <View style={styles.answersView}>
                         {
                             answers.map((answer) => 
-                            (
-                                <AnswerCard key={answer.id} id={answer.id} answer={answer} />
-                            ))
+                                (
+                                    <View style={{marginBottom: 8}}>
+                                        <AnswerCard key={answer.id} id={answer.id} answer={answer} />
+                                    </View>
+                                )
+                            )
                         }
                     </View>
-
-                    <View style={styles.writeAnswerView}>
-                        <Text style={styles.writeAnswerTitle}>Write an answer</Text>
-                        <TextInput
-                            onFocus={() => checkSignedin()}
-                            style={styles.writeAnswerTextInput}
-                            value={myAnswer}
-                            onChangeText={(text) => setMyAsnwer(text)}
-                            textAlignVertical="top"
-                        />
-                        <Button title="Submit" onPress={() => replyAnswer()} />
-                    </View>
                 </ScrollView>
+                <View style={styles.writeAnswerView}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Write Comment')}>
+                        <View style={styles.writeAnswerWrapper}>
+                            <Text style={styles.writeAnswerText}>Add a comment</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </View>
         </MySafeArea>
     )
@@ -154,25 +151,19 @@ const styles = StyleSheet.create({
         paddingLeft: 50
     },
     writeAnswerView: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
         flexDirection: 'column',
-        marginBottom: 32,
         backgroundColor: '#FFF',
-        paddingBottom: 24,
-        paddingHorizontal: 16,
+        width: '100%',
     },
-    writeAnswerTitle: {
-        fontSize: 18,
-        paddingTop: 24,
-        paddingBottom: 16,
-        maxHeight: 75,
-    },
-    writeAnswerTextInput: {
-        backgroundColor: '#EFEFEF',
+    writeAnswerWrapper: {
+        marginHorizontal: 8,
+        marginVertical: 12,
         padding: 8,
-        marginBottom: 8,
-        borderColor: '#C1C1C1',
-        borderWidth: 1,
-        borderRadius: 10
+        backgroundColor: '#E0E0E0',
+        borderRadius: 8,
     },
 
 
