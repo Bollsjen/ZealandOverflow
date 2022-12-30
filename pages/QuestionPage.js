@@ -12,35 +12,36 @@ import QuestionsRepository from '../offline_api/repository/QuestionsRepository';
 import { UserRepository } from '../offline_api/repository/UserRepository.js';
 import FilandaSignin from '../sigin/FilandaSignin.js';
 
+const SERVER_URL = 'http://192.168.0.102:3000/api/Answers'
+
 const QuestionPage = ({route, navigation}) => {
     const qManager = new QuestionsRepository()
     const aManager = new AnswersRepository()
     const uManager = new UserRepository()
 
-    const [question, setQuestion] = useState([])
     const [answers, setAnswers] = useState([])
     const [myAnswer, setMyAsnwer] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
     const {id} = route.params
 
-    useEffect(() => {
-        fetchQuestion()
-        fetchAnswer()
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
+
+    useEffect(async () => {
+        setLoading(true)
+        await fetchAnswer()
+        setLoading(false)
     }, [])
 
-    const fetchQuestion = () => {
-        try{            
-            setQuestion(qManager.GetAllQuestionsById(id)[0])            
+    const fetchAnswer = async () => {
+        try{
+            const response = await fetch(SERVER_URL + '/by/question/' + id,{
+                method: "GET",})
+              const data = await response.json()
+              console.log(data)
+              answers(await data)
         }catch(err){
-            setError(err)
-        }
-    }
-
-    const fetchAnswer = () => {
-        try{            
-            setAnswers(aManager.GetAllAnswersByQuestionId(id))
-            //console.log(answers)
-        }catch(err){
+            console.log('error: ', err)
             setError(err)
         }
     }
@@ -102,17 +103,19 @@ const QuestionPage = ({route, navigation}) => {
             <View style={styles.container}>
                 <ScrollView style={{margin: 0, padding: 0, marginBottom: 50,}} contentProps={{keyboardDismissMode: 'interactive', keyboardShouldPersistTaps: 'handled'}}>
                     <View style={styles.questionContainer}>
-                        <QuestionPageCard question={question}/>
+                    {
+                        !loading ? (<QuestionPageCard id={id}/>) : null
+                    }
                     </View>
                     <View style={styles.answersView}>
                         {
-                            answers.map((answer) => 
+                            !loading ? answers.map((answer) => 
                                 (
                                     <View style={{marginBottom: 8}}>
                                         <AnswerCard key={answer.id} id={answer.id} answer={answer} />
                                     </View>
                                 )
-                            )
+                            ) : null
                         }
                     </View>
                 </ScrollView>

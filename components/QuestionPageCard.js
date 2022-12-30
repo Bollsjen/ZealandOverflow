@@ -7,11 +7,33 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import { UserRepository } from '../offline_api/repository/UserRepository';
 
+const SERVER_URL = 'http://192.168.0.102:3000/api/Questions'
+
 const QuestionPageCard = (props) => {
     const uManager = new UserRepository()
+    const {id} = props
+    const [question, setQuestion] = useState([])
+    const [error, setError] = useState('')
+
+    useEffect(() => {
+        fetchQuestion()
+    },[])
+
+    const fetchQuestion = async () => {
+        try{
+            const response = await fetch(SERVER_URL + '/' + id,{
+                method: "GET",})
+              const data = await response.json()
+              console.log(data[0])
+              setQuestion(await data[0])
+        }catch(err){
+            console.log('error: ', err)
+            setError(err)
+        }
+    }
 
     const Asked = () => {
-        const date = new Date(props.question.created)
+        const date = new Date(question.created)
         const now = Date.now()
         const difference = now - (date.getTime() * 1000)
         
@@ -45,7 +67,7 @@ const QuestionPageCard = (props) => {
     }
 
     const UserSince = () => {
-        const date = new Date(props.question.user ? props.question.user.created * 1000 : '')
+        const date = new Date(question.user ? question.user.created * 1000 : 0)
         const now = Date.now()
         const difference = now - (date.getTime() * 1000)
         
@@ -72,7 +94,7 @@ const QuestionPageCard = (props) => {
                     <AntDesign style={styles.questionCardProfilePicture} name="user" />
                 </View>
                 <View style={styles.questionCardUsernameView}>
-                    <Text style={styles.questionCardUsernameText}>Username</Text>
+                    <Text style={styles.questionCardUsernameText}>{question.user && question.user.userName}</Text>
                 </View>
                 <View style={styles.questionCardDateView}>
                     <Entypo style={{color: '#808080'}} name="dot-single" />
@@ -81,23 +103,23 @@ const QuestionPageCard = (props) => {
             </View>
 
             <View style={styles.questionCardContent}>
-                <Text style={styles.questionContentText}>{props.question.description}</Text>
+                <Text style={styles.questionContentText}>{question.description}</Text>
             </View>
 
             <View style={styles.questionFooterView}>
                 <TouchableOpacity style={styles.reactionButton}>
                     <Feather style={styles.reactionIcon} name="thumbs-up" />
-                    <Text style={styles.reactionText}>{props.question.votes}</Text>
+                    <Text style={styles.reactionText}>{question.votes}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.reactionButton}>
                     <Feather style={styles.reactionIcon} name="thumbs-down" />
-                    <Text style={styles.reactionText}>{props.question.votes}</Text>
+                    <Text style={styles.reactionText}>{question.votes}</Text>
                 </TouchableOpacity>
 
                 <View style={styles.reactionButton}>
                     <FontAwesome style={styles.reactionIcon} name="commenting-o" />
-                    <Text style={styles.reactionText}>{props.question.votes}</Text>
+                    <Text style={styles.reactionText}>{question.votes}</Text>
                 </View>
 
                 <TouchableOpacity style={styles.editButton}>
