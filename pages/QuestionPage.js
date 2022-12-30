@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity, ScrollView, Image, TextInput, Modal, Pressable, Keyboard, KeyboardAvoidingView } from 'react-native';
 import AnswerCard from '../components/AnswerCard.js';
@@ -35,14 +36,11 @@ const QuestionPage = ({route, navigation}) => {
 
     const fetchAnswer = async () => {
         try{
-            const response = await fetch(SERVER_URL + '/by/question/' + id,{
-                method: "GET",})
-              const data = await response.json()
-              console.log(data)
-              answers(await data)
-        }catch(err){
-            console.log('error: ', err)
-            setError(err)
+            const response = await axios.get(SERVER_URL + '/by/question/'+id)
+            const data = await response.data
+            setAnswers(data)
+        }catch(e){
+            console.error('answers Fetch error', e)
         }
     }
 

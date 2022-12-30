@@ -4,6 +4,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import axios from 'axios';
 
 import { UserRepository } from '../offline_api/repository/UserRepository';
 
@@ -21,14 +22,11 @@ const QuestionPageCard = (props) => {
 
     const fetchQuestion = async () => {
         try{
-            const response = await fetch(SERVER_URL + '/' + id,{
-                method: "GET",})
-              const data = await response.json()
-              console.log(data[0])
-              setQuestion(await data[0])
-        }catch(err){
-            console.log('error: ', err)
-            setError(err)
+            const response = await axios.get(SERVER_URL+'/'+id)
+            const data = await response.data
+            setQuestion(data[0])
+        }catch(e){
+            console.error('question Fetch error', e)
         }
     }
 

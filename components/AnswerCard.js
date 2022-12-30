@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity, ScrollView, Image } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -8,34 +9,22 @@ import AnswersRepository from '../offline_api/repository/AnswersRepository';
 import { UserRepository } from '../offline_api/repository/UserRepository';
 import AnswerReplyCard from './AnswerReplyCard';
 
+const SERVER_URL = 'http://192.168.0.102:3000/api/Answers/Replies/by/answer/'
+
 const AnswerCard = (props) => {
     const uManager = new UserRepository()
     const aManager = new AnswersRepository()
-    const [user, setUser] = useState([])
     const [replies, setReplies] = useState([])
 
     useEffect(() => {
-        GetAnswer()
         GetReplies()
     }, [])
 
-    const GetAnswer = () =>{
+    const GetReplies = async () => {
         try{
-            if(props.answer.user){
-                setUser(uManager.GetUserById(props.answer.user.id))
-                console.log(answer)
-            }
-            console.log("Key not set")
-        }catch(err){
-            console.log(err)
-        }
-    }
-
-    const GetReplies = () => {
-        try{
-            if(props.answer){
-                setReplies(aManager.GetAllRepliesByAnswerId(props.answer.id))
-            }
+            const response = await axios.get(SERVER_URL + props.answer.id)
+            const data = await response.data
+            setReplies(data)
         }catch(err){
             console.log(err)
         }
