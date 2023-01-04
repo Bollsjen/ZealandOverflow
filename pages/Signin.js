@@ -12,12 +12,13 @@ const Signin = ({navigation}) => {
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
 
-    const signin = () => {
-        if(FilandaSignin.signinWithUsernameAndPassword(username, password)){
+    const signin = async () => {
+        const response = await FilandaSignin.signinWithUsernameAndPassword(username, password)
+        if(response == 'success'){
             setError('success')
         }else{
             setError('Wrong username or password')
-            console.log('error')
+            console.log(response)
         }
     }
 

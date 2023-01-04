@@ -5,6 +5,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { UserRepository } from '../offline_api/repository/UserRepository';
+import FilandaSignin from '../sigin/FilandaSignin';
 
 const AnswerReplyCard = (props) => {
 
@@ -72,9 +73,9 @@ const AnswerReplyCard = (props) => {
                     <Text style={styles.reactionText}>{props.reply.votes}</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.reactionButton}>
-                    <AntDesign style={styles.reactionIcon} name="back" />
-                    <Text style={styles.reactionText}>reply</Text>
+                <TouchableOpacity style={styles.reactionButton} onPress={() => {if(FilandaSignin.currentUser) props.navigation.navigate('Write Reply', {id: props.answer})}}>
+                        <AntDesign style={styles.reactionIcon} name="back" />
+                        <Text style={styles.reactionText}>reply</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.editButton}>

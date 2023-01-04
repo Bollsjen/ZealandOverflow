@@ -8,7 +8,7 @@ import axios from 'axios';
 
 import { UserRepository } from '../offline_api/repository/UserRepository';
 
-const SERVER_URL = 'http://192.168.0.102:3000/api/Questions'
+const SERVER_URL = 'http://'/*192.168.0.102*/+'192.168.1.177:3000/api/Questions'
 
 const QuestionPageCard = (props) => {
     const uManager = new UserRepository()
@@ -103,17 +103,31 @@ const QuestionPageCard = (props) => {
             <View style={styles.questionCardContent}>
                 <Text style={styles.questionContentText}>{question.description}</Text>
             </View>
+            <View style={[styles.questionCardContent, {flexDirection: 'row', flexWrap: 'wrap'}]}>
+                {
+                    question.tags && question.tags.map((tag, index) => (
+                            <View key={index} style={styles.questionCardTags}>
+                                <Text style={styles.questionCardTagsText}>{tag}</Text>
+                            </View>
+                        )
+                    )
+                }
+            </View>
 
             <View style={styles.questionFooterView}>
-                <TouchableOpacity style={styles.reactionButton}>
-                    <Feather style={styles.reactionIcon} name="thumbs-up" />
-                    <Text style={styles.reactionText}>{question.votes}</Text>
-                </TouchableOpacity>
+                <View style={[styles.reactionButton, {flex: 1}]}>
+                    <TouchableOpacity style={{paddingHorizontal: 4,flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start'}}>
+                        <AntDesign style={styles.reactionIconVote} name="caretup" />
+                    </TouchableOpacity>
 
-                <TouchableOpacity style={styles.reactionButton}>
-                    <Feather style={styles.reactionIcon} name="thumbs-down" />
-                    <Text style={styles.reactionText}>{question.votes}</Text>
-                </TouchableOpacity>
+                    <View style={{flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', paddingHorizontal: 4}}>
+                        <Text>{question.votes}</Text>
+                    </View>
+
+                    <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', paddingHorizontal: 4}}>
+                        <AntDesign style={styles.reactionIconVote} name="caretdown" />
+                    </TouchableOpacity>
+                </View>
 
                 <View style={styles.reactionButton}>
                     <FontAwesome style={styles.reactionIcon} name="commenting-o" />
@@ -180,11 +194,14 @@ const styles = StyleSheet.create({
     reactionButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: 70,
+        minWidth: 70,
         alignSelf: 'flex-start'
     },
     reactionIcon: {
         fontSize: 18,
+    },
+    reactionIconVote: {
+        fontSize: 20,
     },
     reactionText: {
         fontSize: 14,
@@ -194,6 +211,19 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: 'flex-end',
         alignItems: 'flex-end'
+    },
+
+
+
+    questionCardTags: {
+        backgroundColor: '#E1ECF4',
+        marginRight: 4,
+        paddingHorizontal: 4,
+        paddingVertical: 2
+    },
+    questionCardTagsText: {
+        color: '#39739D',
+        fontSize: 12
     }
 })
 

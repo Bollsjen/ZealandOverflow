@@ -1,8 +1,9 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, Button, TouchableOpacity, SafeAreaView, StatusBar, ScrollView } from 'react-native';
 import QuestionsRepository from '../offline_api/repository/QuestionsRepository';
 
-const EDUCATION_URL = 'http://192.168.0.102:3000/api/Educations'
+const EDUCATION_URL = 'http://'/*192.168.0.102*/+'192.168.1.177:3000/api/Educations'
 
 const QuestionCard = ({style, ...props}) => {
     const manager = new QuestionsRepository()
@@ -10,17 +11,16 @@ const QuestionCard = ({style, ...props}) => {
     const [error, setError] = useState('')
     const [education, setEducation] = useState([])
     const [question, setQuestion] = useState(props.question)
+    const [answersCount, setAnswersCount] = useState(0)
 
     useEffect(() => {
          fetchEducation(question.educationId)
     }, [])
 
     const fetchEducation = async (id) => {
-        console.log('id:', id)
         try{
             id = Number(id)
             const url = EDUCATION_URL + '/' + parseInt(id)
-            console.log('url', url)
             const response = await fetch(url,{
                 method: "GET",
                 headers: {
@@ -28,9 +28,26 @@ const QuestionCard = ({style, ...props}) => {
                 },})
               const data = await response.json()
               setEducation(await data)
+              getAnswerCount()
         }catch(err){
             console.error('error: ', err)
             setError(err)
+        }
+    }
+
+
+    const getAnswerCount = async () => {
+        try{
+            const url = 'http://'/*192.168.0.102*/+'192.168.1.177:3000/api/Answers/by/question/' + question.id
+            const response = await axios.get(url)
+            const data = await response.data
+            if(response.status == 200){
+                setAnswersCount(data.length)
+            }
+            else
+                console.log(response.statusText)
+        }catch(e){
+            console.log(e)
         }
     }
 
@@ -41,8 +58,8 @@ const QuestionCard = ({style, ...props}) => {
                     <View style={{flexDirection: 'column', width: 75}}>
                         <View>
                             <Text style={{alignSelf: 'flex-end'}}>{question.votes} votes</Text>
-                            <Text style={{alignSelf: 'flex-end'}}>0 answers</Text>
-                            <Text style={{alignSelf: 'flex-end'}}>27 views</Text>
+                            <Text style={{alignSelf: 'flex-end'}}>{answersCount} answers</Text>
+                            <Text style={{alignSelf: 'flex-end'}}>{question.views} views</Text>
                         </View>
                     </View>
 

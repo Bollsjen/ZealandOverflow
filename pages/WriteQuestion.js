@@ -5,8 +5,9 @@ import MySafeArea from '../components/MySafeArea'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { Question } from '../offline_api/models/Question';
 import FilandaSignin from '../sigin/FilandaSignin';
+import axios from 'axios';
 
-const SERVER_URL = 'http://192.168.0.102:3000'
+const SERVER_URL = 'http://'/*192.168.0.102*/+'192.168.1.177:3000'
 
 const createFormData = (photo, body = {}) => {
     const data = new FormData()
@@ -77,17 +78,12 @@ const WriteQuestion = ({route, navigation}) => {
         try{
             if(title != '' && title != null && title != undefined){
                 if(question != '' && question != null && question != undefined){
-                    const response = await fetch(SERVER_URL + '/api/Questions', {
-                        method: "POST",
-                        body: JSON.stringify({
-                            question: new Question(0, FilandaSignin.currentUser, title, education, question, 0, null, tags)
-                        }),
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    if(await response.ok){
+                    const body = {question: JSON.stringify(new Question(0, FilandaSignin.currentUser, title, education, question, 0, 0, null, tags)) }
+                    const response = await axios.post(SERVER_URL + '/api/Questions', body)
+                    if(await response.status == 200){
                         navigation.navigate('Home')
+                    }else{
+                        console.log('question post error', response.statusText)
                     }
                 }
             }

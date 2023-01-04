@@ -13,7 +13,7 @@ import QuestionsRepository from '../offline_api/repository/QuestionsRepository';
 import { UserRepository } from '../offline_api/repository/UserRepository.js';
 import FilandaSignin from '../sigin/FilandaSignin.js';
 
-const SERVER_URL = 'http://192.168.0.102:3000/api/Answers'
+const SERVER_URL = 'http://'/*192.168.0.102*/+'192.168.1.177:3000/api/Answers'
 
 const QuestionPage = ({route, navigation}) => {
     const qManager = new QuestionsRepository()
@@ -28,10 +28,8 @@ const QuestionPage = ({route, navigation}) => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
 
-    useEffect(async () => {
-        setLoading(true)
-        await fetchAnswer()
-        setLoading(false)
+    useEffect(() => {
+        fetchAnswer()
     }, [])
 
     const fetchAnswer = async () => {
@@ -110,7 +108,7 @@ const QuestionPage = ({route, navigation}) => {
                             !loading ? answers.map((answer) => 
                                 (
                                     <View style={{marginBottom: 8}}>
-                                        <AnswerCard key={answer.id} id={answer.id} answer={answer} />
+                                        <AnswerCard key={answer.id} id={answer.id} answer={answer} navigation={navigation} />
                                     </View>
                                 )
                             ) : null
@@ -118,7 +116,7 @@ const QuestionPage = ({route, navigation}) => {
                     </View>
                 </ScrollView>
                 <View style={styles.writeAnswerView}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Write Comment')}>
+                    <TouchableOpacity onPress={() => {if(FilandaSignin.currentUser) navigation.navigate('Write Comment', {id: id})}}>
                         <View style={styles.writeAnswerWrapper}>
                             <Text style={styles.writeAnswerText}>Add a comment</Text>
                         </View>

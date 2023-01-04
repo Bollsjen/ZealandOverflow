@@ -3,12 +3,12 @@ import { View, Text, StyleSheet, Button, TouchableOpacity, ScrollView, Image, Te
 import MySafeArea from '../components/MySafeArea';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FilandaSignin from '../sigin/FilandaSignin';
-import { Answer } from '../offline_api/models/Answer';
 import axios from 'axios';
+import { AnswerReplies } from '../offline_api/models/AnswerReplies';
 
-const SERVER_URL = 'http://'/*192.168.0.102*/+'192.168.1.177:3000/api/Answers'
+const SERVER_URL = 'http://'/*192.168.0.102*/+'192.168.1.177:3000/api/Answers/Replies'
 
-const WriteComment = ({route, navigation}) => {
+const WriteReply = ({route, navigation}) => {
     
     const{id} = route.params
 
@@ -17,15 +17,15 @@ const WriteComment = ({route, navigation}) => {
     const submitQuestion = async () => {
         try{
                 if(answer != '' && answer != null && answer != undefined){
-                    const body = {
-                        answer: JSON.stringify(new Answer(0, FilandaSignin.currentUser, id, answer, 0, false, null))
-                    }
+                    const body = {reply: JSON.stringify(new AnswerReplies(0, FilandaSignin.currentUser, id, answer, 0, false, null))}
                     const response = await axios.post(SERVER_URL, body)
                     if(await response.status == 200){
-                        navigation.navigate('Home')
+                        navigation.goBack()
                     }else{
                         console.log(await response.statusText)
                     }
+                }else{
+                    console.log('reply text error')
                 }
         }catch(err){
             console.log('Error: ',err)
@@ -116,4 +116,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default WriteComment
+export default WriteReply

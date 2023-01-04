@@ -8,6 +8,7 @@ import Signin from './pages/Signin';
 import Signup from './pages/Signup';
 import WriteComment from './pages/WriteComment';
 import WriteQuestion from './pages/WriteQuestion';
+import WriteReply from './pages/WriteReply';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ export default function App() {
         <Stack.Screen name="Question Page" component={QuestionPage}/>
         <Stack.Screen name="Write Comment" component={WriteComment}/>
         <Stack.Screen name="Write Question" component={WriteQuestion}/>
+        <Stack.Screen name="Write Reply" component={WriteReply}/>
 
         <Stack.Screen name="Signin" component={Signin}/>
         <Stack.Screen name="Signup" component={Signup}/>

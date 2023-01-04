@@ -7,9 +7,10 @@ import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AnswersRepository from '../offline_api/repository/AnswersRepository';
 import { UserRepository } from '../offline_api/repository/UserRepository';
+import FilandaSignin from '../sigin/FilandaSignin';
 import AnswerReplyCard from './AnswerReplyCard';
 
-const SERVER_URL = 'http://192.168.0.102:3000/api/Answers/Replies/by/answer/'
+const SERVER_URL = 'http://'/*192.168.0.102*/+'192.168.1.177:3000/api/Answers/Replies/by/answer/'
 
 const AnswerCard = (props) => {
     const uManager = new UserRepository()
@@ -125,7 +126,7 @@ const AnswerCard = (props) => {
                         <Text style={styles.reactionText}>{props.answer.votes}</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.reactionButton}>
+                    <TouchableOpacity style={styles.reactionButton} onPress={() => {if(FilandaSignin.currentUser) props.navigation.navigate('Write Reply', {id: props.answer.id})}}>
                         <AntDesign style={styles.reactionIcon} name="back" />
                         <Text style={styles.reactionText}>reply</Text>
                     </TouchableOpacity>
@@ -144,13 +145,13 @@ const AnswerCard = (props) => {
                                     if(index != replies.length-1){
                                         return(
                                             <View style={{marginBottom: 42}}>
-                                                <AnswerReplyCard reply={reply} />
+                                                <AnswerReplyCard answer={props.id} reply={reply} navigation={props.navigation} />
                                             </View>
                                         )
                                     }else{
                                         return(
                                             <View style={{marginBottom: 8}}>
-                                                <AnswerReplyCard reply={reply} />
+                                                <AnswerReplyCard answer={props.id} reply={reply} navigation={props.navigation} />
                                             </View>
                                         )
                                     }
