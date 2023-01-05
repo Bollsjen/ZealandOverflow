@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, Button, TouchableOpacity, SafeAreaView, StatusBar, ScrollView } from 'react-native';
 import QuestionsRepository from '../offline_api/repository/QuestionsRepository';
 
-const EDUCATION_URL = 'http://'/*192.168.0.102*/+'192.168.1.177:3000/api/Educations'
+const EDUCATION_URL = 'http://'/*192.168.0.102*/+'192.168.0.30:3000/api/Educations'
 
 const QuestionCard = ({style, ...props}) => {
     const manager = new QuestionsRepository()

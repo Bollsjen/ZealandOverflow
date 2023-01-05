@@ -12,7 +12,7 @@ import FilandaSignin from '../sigin/FilandaSignin.js';
 import Chip from '../components/Chip.js';
 import axios from 'axios';
 
-const SERVER_URL = 'http://'/*192.168.0.102*/+'192.168.1.177:3000/api/Questions'
+const SERVER_URL = 'http://'/*192.168.0.102*/+'192.168.0.30:3000/api/Questions'
 
 const HomePage = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false)
@@ -37,15 +37,20 @@ const HomePage = ({navigation}) => {
   }, [])
 
   useEffect(() => {
-    console.log(education)
-    sort()
-    let filteredList = questions.slice()
+    let filteredList = sort()
     if(education > 0){
       filteredList = filteredList.filter(q => q.educationId == (education-1))
     }
-    console.log(filteredList)
     setQuestions(filteredList)
   }, [education])
+
+  useEffect(() => {
+    setQuestions(sort())
+  }, [sortByVotes])
+
+  useEffect(() => {
+    setQuestions(sort())
+  }, [sortByViews])
 
   const fetchQuestions = async () => {
     try{
@@ -74,21 +79,25 @@ const HomePage = ({navigation}) => {
   const sort = () => {
     let sortedList = originalQuestions.slice()
     sortedList = sortedList.sort((a,b) => (a.id > b.id ? 1 : -1))
-    if(sortByVotes == 0){
+    if(sortByVotes == 1){
       sortedList = sortedList.sort((a,b) => (a.votes < b.votes ? 1 : -1))
-    }else if(sortByVotes == 1){
+    }else if(sortByVotes == 2){
       sortedList = sortedList.sort((a,b) => (a.votes > b.votes ? 1 : -1))
     }
 
 
-    if(sortByViews == 0) {
+    if(sortByViews == 1) {
       sortedList = sortedList.sort((a,b) => (a.views < b.views ? 1 : -1))
-    }else if(sortByViews == 1){
+    }else if(sortByViews == 2){
       sortedList = sortedList.sort((a,b) => (a.views > b.views ? 1 : -1))
+    }
+
+    if(sortByViews == 0 && sortByVotes == 0){
+      sortedList = originalQuestions.slice()
     }
     
     console.log(sortByVotes + ', ' + sortByViews)
-    setQuestions(sortedList)
+    return sortedList
   }
 
   const filter = () => {
@@ -102,7 +111,7 @@ const HomePage = ({navigation}) => {
 
   const fetchEducations = async () => {
     try{
-        const response = await axios.get('http://192.168.1.177:3000/api/Educations')
+        const response = await axios.get('http://'/*192.168.0.102*/+'192.168.0.30:3000/api/Educations')
         const data = await response.data
         let newData = [ "All" ]
         console.log(data)
@@ -140,8 +149,8 @@ const HomePage = ({navigation}) => {
               </View>
               <View style={styles.sortingView}>
                 <ScrollView horizontal>
-                  <Chip title="Votes" state={sortByVotes} setState={setSortByVotes} onPress={sort}/>
-                  <Chip title="Views" state={sortByViews} setState={setSortByViews} onPress={sort}/>
+                  <Chip title="Votes" state={sortByVotes} setState={setSortByVotes} onPress={() =>{}}/>
+                  <Chip title="Views" state={sortByViews} setState={setSortByViews} onPress={() =>{}}/>
                 </ScrollView>
               </View>
               <View style={{marginBottom: 154}}>
