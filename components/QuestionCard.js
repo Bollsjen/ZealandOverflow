@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, Button, TouchableOpacity, SafeAreaView, StatusBar, ScrollView } from 'react-native';
 import QuestionsRepository from '../offline_api/repository/QuestionsRepository';
 
-const EDUCATION_URL = 'http://'/*192.168.0.102*/+'192.168.0.30:3000/api/Educations'
+const EDUCATION_URL = 'http://192.168.0.102:3000/api/Educations'
 
 const QuestionCard = ({style, ...props}) => {
     const manager = new QuestionsRepository()
@@ -30,7 +30,7 @@ const QuestionCard = ({style, ...props}) => {
               setEducation(await data)
               getAnswerCount()
         }catch(err){
-            console.error('error: ', err)
+            console.error('QuestionCard: ', err)
             setError(err)
         }
     }

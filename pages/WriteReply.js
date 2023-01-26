@@ -6,7 +6,7 @@ import FilandaSignin from '../sigin/FilandaSignin';
 import axios from 'axios';
 import { AnswerReplies } from '../offline_api/models/AnswerReplies';
 
-const SERVER_URL = 'http://'/*192.168.0.102*/+'192.168.1.177:3000/api/Answers/Replies'
+const SERVER_URL = 'http://192.168.0.102:3000/api/Answers/Replies'
 
 const WriteReply = ({route, navigation}) => {
     
@@ -38,7 +38,7 @@ const WriteReply = ({route, navigation}) => {
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <AntDesign style={{fontSize: 24, padding: 4,}} name="arrowleft" />
                     </TouchableOpacity>
-                    <Text style={{fontSize: 20, marginLeft: 8}}>Write a question</Text>
+                    <Text style={{fontSize: 20, marginLeft: 8}}>Write a comment reply</Text>
                     <TouchableOpacity style={{flex:1, alignItems: 'flex-end', marginRight: 4,}} onPress={submitQuestion}>
                         <Text style={{fontSize: 16, color: '#0066CC', paddingVertical: 8, paddingHorizontal: 12, backgroundColor: '#D6F1FF', borderRadius: 4,}}>Post</Text>
                     </TouchableOpacity>

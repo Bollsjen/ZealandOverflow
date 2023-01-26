@@ -18,7 +18,7 @@ const Signin = ({navigation}) => {
             setError('success')
         }else{
             setError('Wrong username or password')
-            console.log(response)
+            console.log("Sigin: "+response)
         }
     }
 

@@ -8,7 +8,7 @@ import axios from 'axios';
 
 import { UserRepository } from '../offline_api/repository/UserRepository';
 
-const SERVER_URL = 'http://'/*192.168.0.102*/+'192.168.0.30:3000/api/Questions'
+const SERVER_URL = 'http://192.168.0.102:3000/api/Questions'
 
 const QuestionPageCard = (props) => {
     const uManager = new UserRepository()
@@ -26,7 +26,7 @@ const QuestionPageCard = (props) => {
             const data = await response.data
             setQuestion(data[0])
         }catch(e){
-            console.error('question Fetch error', e)
+            console.error('QuestionPageCard', e)
         }
     }
 

@@ -2,7 +2,7 @@ import { User } from "../offline_api/models/User"
 import { UserRepository } from "../offline_api/repository/UserRepository"
 import axios from 'axios';
 
-const SERVER_URL = 'http://'/*192.168.0.102*/+'192.168.1.177:3000/api/Users/signin'
+const SERVER_URL = 'http://192.168.0.102:3000/api/Users/signin'
 
 export default class FilandaSignin {
     static currentUser = null

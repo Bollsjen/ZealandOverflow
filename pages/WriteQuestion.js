@@ -7,7 +7,7 @@ import { Question } from '../offline_api/models/Question';
 import FilandaSignin from '../sigin/FilandaSignin';
 import axios from 'axios';
 
-const SERVER_URL = 'http://'/*192.168.0.102*/+'192.168.1.177:3000'
+const SERVER_URL = 'http://192.168.0.102:3000'
 
 const createFormData = (photo, body = {}) => {
     const data = new FormData()

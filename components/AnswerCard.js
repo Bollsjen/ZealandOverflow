@@ -10,7 +10,7 @@ import { UserRepository } from '../offline_api/repository/UserRepository';
 import FilandaSignin from '../sigin/FilandaSignin';
 import AnswerReplyCard from './AnswerReplyCard';
 
-const SERVER_URL = 'http://'/*192.168.0.102*/+'192.168.0.30:3000/api/Answers/Replies/by/answer/'
+const SERVER_URL = 'http://192.168.0.102:3000/api/Answers/Replies/by/answer/'
 
 const AnswerCard = (props) => {
     const uManager = new UserRepository()
@@ -27,7 +27,7 @@ const AnswerCard = (props) => {
             const data = await response.data
             setReplies(data)
         }catch(err){
-            console.log(err)
+            console.log("AnswerCard: "+err)
         }
     }
 

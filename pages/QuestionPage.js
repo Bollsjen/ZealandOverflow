@@ -13,7 +13,7 @@ import QuestionsRepository from '../offline_api/repository/QuestionsRepository';
 import { UserRepository } from '../offline_api/repository/UserRepository.js';
 import FilandaSignin from '../sigin/FilandaSignin.js';
 
-const SERVER_URL = 'http://'/*192.168.0.102*/+'192.168.1.177:3000/api/Answers'
+const SERVER_URL = 'http://192.168.0.102:3000/api/Answers'
 
 const QuestionPage = ({route, navigation}) => {
     const qManager = new QuestionsRepository()
@@ -38,7 +38,7 @@ const QuestionPage = ({route, navigation}) => {
             const data = await response.data
             setAnswers(data)
         }catch(e){
-            console.error('answers Fetch error', e)
+            console.error('QuestionPage: ' + e)
         }
     }
 
@@ -116,7 +116,7 @@ const QuestionPage = ({route, navigation}) => {
                     </View>
                 </ScrollView>
                 <View style={styles.writeAnswerView}>
-                    <TouchableOpacity onPress={() => {if(FilandaSignin.currentUser) navigation.navigate('Write Comment', {id: id})}}>
+                    <TouchableOpacity onPress={() => {if(FilandaSignin.currentUser) navigation.navigate('Write Comment', {id: id});else {setModalVisible(!modalVisible)}}}>
                         <View style={styles.writeAnswerWrapper}>
                             <Text style={styles.writeAnswerText}>Add a comment</Text>
                         </View>
